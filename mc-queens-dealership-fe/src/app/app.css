@@ -1,0 +1,7 @@
+@font-face {
+  font-family: "magnetob"; /* set name */
+  src: url(../../public/fonts/magnetob.ttf) format('truetype'); /* url of the font */
+}
+.bg {
+    background-color: white;
+}

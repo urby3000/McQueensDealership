@@ -1,7 +1,22 @@
-.header-img {
-    background-image:  url(../../../public/header_img.jpg);
+
+.img-header{
+  background-image: url(../../../public/bossman.png);
   background-repeat: no-repeat;
-  background-position: center;
-  width: 100%; 
-  height: 150px;
+  background-size: contain;
+  font-family: "magnetob";
+  text-align: center;
+  font-size: 5vw;
+  color: white;
+  text-decoration: underline;
+}
+header {
+  background-color: #cc1b11;
+}
+.button-login {
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 20px;
+  margin-right: 20px;
 }

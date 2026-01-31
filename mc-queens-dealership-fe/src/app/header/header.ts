@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -7,5 +8,12 @@ import { Component } from '@angular/core';
   styleUrl: './header.css',
 })
 export class Header {
+  currentRoute: string = "";
+  constructor(private router: Router) {
+  }
+    ngOnInit() {
 
+    this.currentRoute = this.router.url;
+
+  }
 }
