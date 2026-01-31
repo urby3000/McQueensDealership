@@ -1,15 +1,33 @@
 <div class="container">
-    
-    <div class="row">
+
+    <!-- <div class="row">
         <div class="col-12 pl-4">
-            <a routerLink="/caraddedit"
-                class="btn btn-warning btn-lg float-start" type="button">
+            <a routerLink="/caraddedit" class="btn btn-warning btn-lg float-start" type="button">
                 <i class="bi bi-plus-circle"></i> Create Ad
             </a>
         </div>
-    </div>
+    </div> -->
+
     <div class="row">
-        <form class="input-form">
+        <form class="input-form pb-0 pt-0">
+
+            <h5>Search</h5>
+            <div class="form-group">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <span>Brand</span>
+                        </span>
+                    </div>
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected></option>
+                        <option value="1">Audi</option>
+                        <option value="2">BMW</option>
+                        <option value="3">Toyota</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="form-group">
                 <div class="input-group input-group-sm">
                     <div class="input-group-prepend">
@@ -28,19 +46,6 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="dropdown">
-                    <button class="btn bg-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select brand
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-            </div>
             <!-- <button type="submit" class="btn btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                     viewBox="0 0 16 16">
@@ -51,24 +56,30 @@
         </form>
     </div>
     <div class="row">
-        <div class="col-12 col-sm-6 p-4">
+        <div class="col-12 p-4">
+            <button type="button" class="btn btn-warning m-1">
+                <i class="bi bi-sort-alpha-up"></i>
+                <i class="bi bi-sort-alpha-down"></i>
+                Brand
+            </button>
+            <button type="button" class="btn btn-warning m-1">
+                <i class="bi bi-sort-up"></i>
+                <i class="bi bi-sort-down"></i>
+                Year
+            </button>
+            <button type="button" class="btn btn-light m-1">
+                <i class="bi bi-sort-up"></i>
+                Price
+            </button>
             <button type="button" class="btn btn-warning m-1">
                 <i class="bi bi-x-circle"></i> Min price</button>
             <button type="button" class="btn btn-warning m-1">
                 <i class="bi bi-x-circle"></i> Max price</button>
             <button type="button" class="btn btn-warning m-1">
                 <i class="bi bi-x-circle"></i> Brand</button>
-        </div>
-        <div class="col-12 col-sm-6 p-4">
-            <button type="button" class="btn btn-warning float-end m-1">
-                <i class="bi bi-sort-alpha-up"></i>
-                <i class="bi bi-sort-alpha-down"></i>
-                Brand</button>
-            <button type="button" class="btn btn-warning float-end m-1">
-                <i class="bi bi-sort-up"></i>
-                <i class="bi bi-sort-down"></i>
-                Year</button>
-            <button type="button" class="btn btn-light float-end m-1">Price</button>
+            <a routerLink="/caraddedit" class="btn btn-warning btn float-end m-1" type="button">
+                <i class="bi bi-plus-circle"></i> Create Ad
+            </a>
         </div>
     </div>
     <div class="container">
@@ -76,7 +87,7 @@
             <div routerLink="/car" class="col card-car"><!--car-->
                 <div class="card">
                     <a routerLink="/caraddedit" class="btn btn-warning btn-md button-edit" type="button">
-                      <i class="bi bi-tools"></i> 
+                        <i class="bi bi-tools"></i>
                     </a>
                     <img class="card-img-top" src="header_img.jpg" alt="Card image cap">
                     <div class="card-body p-1">
@@ -107,6 +118,7 @@
                 </ul>
             </nav>
         </div>
+        
 
     </div>
 

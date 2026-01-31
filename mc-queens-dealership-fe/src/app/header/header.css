@@ -12,11 +12,3 @@
 header {
   background-color: #cc1b11;
 }
-.button-login {
-  width: fit-content;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-top: 20px;
-  margin-right: 20px;
-}

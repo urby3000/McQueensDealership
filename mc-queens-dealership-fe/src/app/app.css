@@ -5,3 +5,12 @@
 .bg {
     background-color: white;
 }
+
+.button-login {
+  width: fit-content;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-top: 8px;
+  margin-right: 24px;
+}
