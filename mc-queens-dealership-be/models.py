@@ -1,3 +1,5 @@
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from dataclasses import dataclass
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Text, BLOB, ForeignKey, create_engine
@@ -11,7 +13,7 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 
 @dataclass
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "users"
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
