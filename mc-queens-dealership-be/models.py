@@ -18,7 +18,7 @@ class User(db.Model):
     password: Mapped[str]  = mapped_column(String(200), nullable=False)
     is_admin: Mapped[Optional[bool]]
 
-    likes: Mapped[List["Like"]] = relationship()
+    likes: Mapped[List["Like"]] = relationship(cascade='all, delete')
 
 @dataclass
 class Car(db.Model):
@@ -33,7 +33,7 @@ class Car(db.Model):
     description: Mapped[Text] = mapped_column(Text, nullable=False)
     img: Mapped[Optional[BLOB]] = mapped_column(BLOB)
     
-    likes: Mapped[List["Like"]] = relationship()
+    likes: Mapped[List["Like"]] = relationship(cascade='all, delete')
 
 
 @dataclass
