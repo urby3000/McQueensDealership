@@ -1,21 +1,62 @@
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
 from flask import jsonify, Blueprint, request
-from models import Car as ModelCar, db
-from sqlalchemy import exc
-from flask_login import login_required, current_user
+from models import User as ModelUser, Car as ModelCar, db
+from sqlalchemy import exc, asc, desc
 
 cars_routes = Blueprint("cars", __name__)
 
 @cars_routes.route("/cars")
 def cars():
-    return jsonify(ModelCar.query.all())
+    query = db.session.query(ModelCar)
+    #sorts ?? xd
+    if request.args.get("sortpriceasc"): query = query.order_by(asc(ModelCar.price))
+    if request.args.get("sortpricedesc"): query = query.order_by(desc(ModelCar.price))
+    if request.args.get("sortbrandasc"): query = query.order_by(ModelCar.brand.asc())
+    if request.args.get("sortbranddesc"): query = query.order_by(ModelCar.brand.desc())
+    if request.args.get("sortyearasc"): query = query.order_by(ModelCar.year.asc())
+    if request.args.get("sortyeardesc"): query = query.order_by(ModelCar.year.desc())
+
+    # #filters 
+    if request.args.get("min_price"): query = query.filter(ModelCar.price>=int(request.args.get("min_price")))
+    if request.args.get("max_price"): query = query.filter(ModelCar.price<=int(request.args.get("max_price")))
+
+    # ?brand=toyota&brand=bmw
+    if request.args.get("brand"): query = query.filter(ModelCar.brand.in_(request.args.getlist("brand")))
+
+    # pagination?!? idk 
+    page = request.args.get('page', 1, type=int)  # page number, default 1
+    per_page = request.args.get('per-page', 24, type=int)  # cars per page
+
+    pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+    results = {
+        "results": [{"brand": c.brand, 
+                     "model": c.model,
+                     "price": c.price,
+                     "year": c.year,
+                     "fuel_type": c.fuel_type,
+                     "doors": c.doors,
+                     "description": c.description,
+                     "img": c.img,
+                     "likes": c.likes,
+                     } for c in pagination.items],
+        "pagination": {
+            "count": pagination.total,
+            "page": page,
+            "per_page": per_page,
+            "pages": pagination.pages,
+        },
+    }
+    return jsonify(results)
 
 @cars_routes.route("/car/<int:id>")
 def car_detail(id: int):
     return jsonify(ModelCar.query.get_or_404(id))
 
 @cars_routes.route("/car/create", methods=["POST"])
-@login_required
+@jwt_required()
 def car_create():
+    current_user = ModelUser.query.filter_by(email=get_jwt_identity()).first()
     if not current_user.is_admin:
         return jsonify({"err":"You don't have admin rights."})
     try:
@@ -33,11 +74,12 @@ def car_create():
         db.session.commit()
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
-    return jsonify(car)
+    return jsonify({"status": "success"})
 
 @cars_routes.route("/car/<int:id>/edit", methods=["POST"])
-@login_required
+@jwt_required()
 def car_edit(id: int):
+    current_user = ModelUser.query.filter_by(email=get_jwt_identity()).first()
     if not current_user.is_admin:
         return jsonify({"err":"You don't have admin rights."})
     try:
@@ -53,11 +95,12 @@ def car_edit(id: int):
         db.session.commit()
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
-    return jsonify(car)
+    return jsonify({"status": "success"})
 
 @cars_routes.route("/car/<int:id>/delete", methods=["DELETE"])
-@login_required
+@jwt_required()
 def car_delete(id):
+    current_user = ModelUser.query.filter_by(email=get_jwt_identity()).first()
     if not current_user.is_admin:
         return jsonify({"err":"You don't have admin rights."})
     car = ModelCar.query.get_or_404(id)

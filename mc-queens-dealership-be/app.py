@@ -1,7 +1,6 @@
-
-from flask_login import LoginManager
-from flask import Flask, jsonify, request
-from models import db, User as ModelUser
+from flask_jwt_extended import JWTManager
+from flask import Flask
+from models import db
 from users import users_routes
 from cars import cars_routes
 from likes import likes_routes
@@ -18,14 +17,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "supersecretkey"
 
-#login manager
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
-# Load user for Flask-Login
-@login_manager.user_loader
-def load_user(user_id):
-    return ModelUser.query.get(int(user_id))
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = "supersecretkey"  # Change this!
+jwt = JWTManager(app)
+
 
 #database
 db.init_app(app)
