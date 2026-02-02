@@ -1,18 +1,23 @@
-from sqlalchemy import Column, Integer, String, Sequence, create_engine
-from sqlalchemy.orm import declarative_base
 
-db_url = "mysql+pymysql://root:admin@localhost:3306/mc-queens-dealership"
+from flask import Flask, jsonify, request
+from models import db
+from users import users_routes
+from cars import cars_routes
+from likes import likes_routes
 
-engine = create_engine(db_url)
+ 
+app = Flask(__name__)
+app.register_blueprint(users_routes)
+app.register_blueprint(cars_routes)
+app.register_blueprint(likes_routes)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+db.init_app(app)
 
-Base = declarative_base()
+# with app.app_context():
+#     db.create_all()
 
-class Car(Base):
-    __tablename__ = "cars"
-    id = Column(Integer,Sequence('user_id_seq'), primary_key=True)
-    brand = Column(String(50))
-    model = Column(String(50))
-    year = Column(Integer)
+@app.route('/')
+def index():
+    return jsonify({'Hello' : 'World!'})
 
-
-#Base.metadata.create_all(engine)
+app.run()
