@@ -12,6 +12,10 @@ from werkzeug.utils import secure_filename
 
 cars_routes = Blueprint("cars", __name__)
 
+@cars_routes.route('/image_uploads/<filename>')
+def get_image(filename):
+    return send_from_directory(config['UPLOAD_PATH'], filename)
+
 @cars_routes.route("/cars")
 def cars():
     query = db.session.query(ModelCar)
@@ -43,7 +47,7 @@ def cars():
                      "fuel_type": c.fuel_type,
                      "doors": c.doors,
                      "description": c.description,
-                     "img": c.img,
+                     "image_name": c.image_name,
                      "likes": c.likes,
                      } for c in pagination.items],
         "pagination": {
@@ -77,7 +81,7 @@ def car_create():
             description = request.form.get("description")
         )
         if image_upload(request, car):
-            car.image_name = request.files['img'].filename
+            car.image_name = request.files['image_name'].filename
         db.session.add(car)
         db.session.commit()
     except exc.SQLAlchemyError as e:
@@ -100,7 +104,7 @@ def car_edit(id: int):
         car.doors = request.form.get("doors")
         car.description = request.form.get("description")
         if image_upload(request, car):
-            car.image_name = request.files['img'].filename
+            car.image_name = request.files['image_name'].filename
         db.session.commit()
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
@@ -121,7 +125,7 @@ def car_delete(id):
         return jsonify({"err": str(e.orig)})
 
 def image_upload(request, car):
-        image = request.files['img']
+        image = request.files['image_name']
 
         # check if filepath already exists. append random string if it does
         if secure_filename(image.filename) in [
