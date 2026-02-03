@@ -3,6 +3,12 @@ from flask_jwt_extended import jwt_required
 from flask import jsonify, Blueprint, request
 from models import User as ModelUser, Car as ModelCar, db
 from sqlalchemy import exc, asc, desc
+from config import config
+
+import os
+import uuid
+from flask import request, session, send_from_directory
+from werkzeug.utils import secure_filename
 
 cars_routes = Blueprint("cars", __name__)
 
@@ -60,6 +66,7 @@ def car_create():
     if not current_user.is_admin:
         return jsonify({"err":"You don't have admin rights."})
     try:
+            
         car = ModelCar(
             brand = request.form.get("brand"),
             model = request.form.get("model"),
@@ -67,9 +74,10 @@ def car_create():
             price = request.form.get("price"),
             fuel_type = request.form.get("fuel_type"),
             doors = request.form.get("doors"),
-            description = request.form.get("description"),
-            # img = request.form["img"]
+            description = request.form.get("description")
         )
+        if image_upload(request, car):
+            car.image_name = request.files['img'].filename
         db.session.add(car)
         db.session.commit()
     except exc.SQLAlchemyError as e:
@@ -91,7 +99,8 @@ def car_edit(id: int):
         car.fuel_type = request.form.get("fuel_type")
         car.doors = request.form.get("doors")
         car.description = request.form.get("description")
-        # car.img = request.form["img"]
+        if image_upload(request, car):
+            car.image_name = request.files['img'].filename
         db.session.commit()
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
@@ -110,3 +119,29 @@ def car_delete(id):
         return jsonify({"status": "success"})
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
+
+def image_upload(request, car):
+        image = request.files['img']
+
+        # check if filepath already exists. append random string if it does
+        if secure_filename(image.filename) in [
+            img.image_name for img in ModelCar.query.all()
+        ]:
+            unique_str = str(uuid.uuid4())[:8]
+            image.filename = f"{unique_str}_{image.filename}"
+
+
+        #  handling file uploads
+        filename = secure_filename(image.filename)
+        if filename:
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in config[
+                "UPLOAD_EXTENSIONS"
+            ]:
+                return {"error": "File type not supported"}, 400
+
+            image.save(os.path.join(config["UPLOAD_PATH"], filename))
+            #   removes old image
+            if car.image_name and os.path.isfile(os.path.join(config["UPLOAD_PATH"], car.image_name)):
+                os.remove(os.path.join(config["UPLOAD_PATH"], car.image_name))
+            return True

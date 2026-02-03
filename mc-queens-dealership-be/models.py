@@ -31,7 +31,7 @@ class Car(db.Model):
     fuel_type: Mapped[str] = mapped_column(String(50), nullable=False)
     doors: Mapped[int] = mapped_column(Integer, nullable=False)
     description: Mapped[Text] = mapped_column(Text, nullable=False)
-    img: Mapped[Optional[BLOB]] = mapped_column(BLOB)
+    image_name: Mapped[str] = mapped_column(String(50), nullable=True)
     
     likes: Mapped[List["Like"]] = relationship(cascade='all, delete')
 
