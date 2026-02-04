@@ -40,7 +40,7 @@ def login():
 
     if user and check_password_hash(user.password, password_form):
         access_token = create_access_token(identity=user.email)
-        return jsonify(access_token=access_token)
+        return jsonify(access_token=access_token, email=email_form, is_admin=user.is_admin, user_id=user.id)
     else:
         return jsonify({"err":"Invalid email or password"})
 

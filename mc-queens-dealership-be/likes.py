@@ -18,10 +18,10 @@ def like_create(id):
         if not ModelLike.query.filter_by(user_id=current_user.id,car_id=id).first():
             db.session.add(like)
             db.session.commit()
-            return jsonify({"status": "success"})
+            return jsonify({"msg": "success"})
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
-    return jsonify({"status": "ok"})
+    return jsonify({"msg": "ok"})
 
 
 @likes_routes.route("/car/<int:id>/unlike", methods=["DELETE"])
@@ -34,7 +34,7 @@ def like_delete(id):
         if like:
             db.session.delete(like)
             db.session.commit()
-            return jsonify({"status": "success"})
-        return jsonify({"status": "ok"})
+            return jsonify({"msg": "success"})
+        return jsonify({"msg": "ok"})
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})

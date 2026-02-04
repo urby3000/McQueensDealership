@@ -2,7 +2,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask import jsonify, Blueprint, request
 from models import User as ModelUser, Car as ModelCar, db
-from sqlalchemy import exc, asc, desc
+from sqlalchemy import exc, asc, desc, distinct
 from config import config
 
 import os
@@ -36,11 +36,12 @@ def cars():
 
     # pagination?!? idk 
     page = request.args.get('page', 1, type=int)  # page number, default 1
-    per_page = request.args.get('per-page', 24, type=int)  # cars per page
+    per_page = request.args.get('per_page', 24, type=int)  # cars per page
 
     pagination = query.paginate(page=page, per_page=per_page, error_out=False)
     results = {
-        "results": [{"brand": c.brand, 
+        "results": [{"id": c.id,
+                     "brand": c.brand, 
                      "model": c.model,
                      "price": c.price,
                      "year": c.year,
@@ -63,6 +64,14 @@ def cars():
 def car_detail(id: int):
     return jsonify(ModelCar.query.get_or_404(id))
 
+# @cars_routes.route("/car/brands")
+# def car_brands():
+#     query = db.session.query(distinct(ModelCar.brand)).all()
+#     results = {
+#         "brands": [{c.brand} for c in query],
+#     }
+#     return jsonify(query)
+
 @cars_routes.route("/car/create", methods=["POST"])
 @jwt_required()
 def car_create():
@@ -81,12 +90,12 @@ def car_create():
             description = request.form.get("description")
         )
         if image_upload(request, car):
-            car.image_name = request.files['image_name'].filename
+            car.image_name = secure_filename(request.files['image'].filename)
         db.session.add(car)
         db.session.commit()
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
-    return jsonify({"status": "success"})
+    return jsonify({"msg": "success"})
 
 @cars_routes.route("/car/<int:id>/edit", methods=["POST"])
 @jwt_required()
@@ -104,11 +113,11 @@ def car_edit(id: int):
         car.doors = request.form.get("doors")
         car.description = request.form.get("description")
         if image_upload(request, car):
-            car.image_name = request.files['image_name'].filename
+            car.image_name = secure_filename(request.files['image'].filename)
         db.session.commit()
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
-    return jsonify({"status": "success"})
+    return jsonify({"msg": "success"})
 
 @cars_routes.route("/car/<int:id>/delete", methods=["DELETE"])
 @jwt_required()
@@ -120,12 +129,12 @@ def car_delete(id):
     try:
         db.session.delete(car)
         db.session.commit()
-        return jsonify({"status": "success"})
+        return jsonify({"msg": "success"})
     except exc.SQLAlchemyError as e:
         return jsonify({"err": str(e.orig)})
 
 def image_upload(request, car):
-        image = request.files['image_name']
+        image = request.files['image']
 
         # check if filepath already exists. append random string if it does
         if secure_filename(image.filename) in [
@@ -142,9 +151,10 @@ def image_upload(request, car):
             if file_ext not in config[
                 "UPLOAD_EXTENSIONS"
             ]:
-                return {"error": "File type not supported"}, 400
+                return {"err": "File type not supported"}, 400
 
             image.save(os.path.join(config["UPLOAD_PATH"], filename))
+
             #   removes old image
             if car.image_name and os.path.isfile(os.path.join(config["UPLOAD_PATH"], car.image_name)):
                 os.remove(os.path.join(config["UPLOAD_PATH"], car.image_name))
