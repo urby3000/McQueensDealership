@@ -1,7 +1,7 @@
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask import jsonify, Blueprint, request
-from models import User as ModelUser, Car as ModelCar, db
+from models import Like as ModelLike, User as ModelUser, Car as ModelCar, db
 from sqlalchemy import exc, asc, desc, distinct
 from config import config
 
@@ -30,6 +30,9 @@ def cars():
     # #filters 
     if request.args.get("min_price"): query = query.filter(ModelCar.price>=int(request.args.get("min_price")))
     if request.args.get("max_price"): query = query.filter(ModelCar.price<=int(request.args.get("max_price")))
+    if request.args.get("user_id") and request.args.get("likes"):
+        current_user = ModelUser.query.filter_by(id=request.args.get("user_id")).first()
+        query = query.join(ModelLike).filter(ModelLike.user_id == current_user.id)
 
     # ?brand=toyota&brand=bmw
     if request.args.get("brand"): query = query.filter(ModelCar.brand.in_(request.args.getlist("brand")))
