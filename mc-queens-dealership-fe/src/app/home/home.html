@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container pb-4 pt-4">
 
     <!-- <div class="row">
         <div class="col-12 pl-4">
@@ -19,12 +19,7 @@
                             <span>Brand</span>
                         </span>
                     </div>
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected></option>
-                        <option value="1">Audi</option>
-                        <option value="2">BMW</option>
-                        <option value="3">Toyota</option>
-                    </select>
+                    <input [formControl]="filter_add_brand" type="text" aria-label="brand" class="form-control">
                 </div>
             </div>
 
@@ -36,8 +31,8 @@
                             <span class="d-block d-sm-none">€ Min.</span>
                         </span>
                     </div>
-                    <input type="text" aria-label="First name" class="form-control">
-                    <input type="text" aria-label="Last name" class="form-control">
+                    <input [formControl]="filter_min_price" type="number" aria-label="min price" class="form-control">
+                    <input [formControl]="filter_max_price" type="number" aria-label="max price" class="form-control">
                     <div class="input-group-append">
                         <span class="input-group-text">
                             <span class="d-none d-sm-block">Maximum price</span>
@@ -46,79 +41,141 @@
                     </div>
                 </div>
             </div>
-            <!-- <button type="submit" class="btn btn-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-                    viewBox="0 0 16 16">
-                    <path
-                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                </svg>
-            </button> -->
+            <button (click)="add_filters()" type="button" class="btn btn-warning">
+                <i class="bi bi-search"></i> Search
+            </button>
         </form>
     </div>
     <div class="row">
         <div class="col-12 p-4">
-            <button type="button" class="btn btn-warning m-1">
-                <i class="bi bi-sort-alpha-up"></i>
-                <i class="bi bi-sort-alpha-down"></i>
+            <button (click)="sort_brand()" class="btn m-1"
+                [ngClass]="current_sort_brand == 'asc' || current_sort_brand == 'desc' ? 'btn-warning' : 'btn-light' "
+                type="button">
+                @if (current_sort_brand == "desc"){
+                <i class="bi bi-sort-down"></i>
+                }@else {
+                <i class="bi bi-sort-up"></i>
+                }
                 Brand
             </button>
-            <button type="button" class="btn btn-warning m-1">
-                <i class="bi bi-sort-up"></i>
+            <button (click)="sort_year()"
+                [ngClass]="current_sort_year == 'asc' || current_sort_year == 'desc' ? 'btn-warning' : 'btn-light' "
+                type="button" class="btn  m-1">
+                @if (current_sort_year == "desc"){
                 <i class="bi bi-sort-down"></i>
+                }@else {
+                <i class="bi bi-sort-up"></i>
+                }
                 Year
             </button>
-            <button type="button" class="btn btn-light m-1">
+            <button (click)="sort_price()"
+                [ngClass]="current_sort_price == 'asc' || current_sort_price == 'desc' ? 'btn-warning' : 'btn-light' "
+                type="button" class="btn  m-1">
+                @if (current_sort_price == "desc"){
+                <i class="bi bi-sort-down"></i>
+                }@else {
                 <i class="bi bi-sort-up"></i>
+                }
                 Price
             </button>
-            <button type="button" class="btn btn-warning m-1">
-                <i class="bi bi-x-circle"></i> Min price</button>
-            <button type="button" class="btn btn-warning m-1">
-                <i class="bi bi-x-circle"></i> Max price</button>
-            <button type="button" class="btn btn-warning m-1">
-                <i class="bi bi-x-circle"></i> Brand</button>
-            <a routerLink="/caraddedit" class="btn btn-warning btn float-end m-1" type="button">
+
+            <button (click)="change_results_per_page()" type="button" class="btn btn-warning m-1">
+                <!-- <i class="bi bi-file-earmark"></i>  -->
+                {{per_page}} x <i class="bi bi-car-front"></i>
+            </button>
+
+            @if(min_price_saved!=""){
+            <button (click)="filter_min_price_remove()" type="button" class="btn btn-warning m-1">
+                <i class="bi bi-x-circle"></i> Min price: {{min_price_saved}} €</button>
+            }
+
+            @if(max_price_saved!=""){
+            <button (click)="filter_max_price_remove()" type="button" class="btn btn-warning m-1">
+                <i class="bi bi-x-circle"></i> Max price: {{max_price_saved}} €</button>
+            }
+
+            @for (b of filter_brands; track b) {
+            <button (click)="filter_brand_remove(b.toString())" type="button" class="btn btn-warning m-1">
+                <i class="bi bi-x-circle"></i> {{b}}</button>
+
+            }
+
+            @if(apiService.isAdmin()=="true"){
+            <a [routerLink]="['car/add']" class="btn btn-warning btn float-end m-1" type="button">
                 <i class="bi bi-plus-circle"></i> Create Ad
             </a>
+            }
         </div>
     </div>
     <div class="container">
         <div class="row row-cols-2 row-cols-sm-4 row-cols-md-6  g-1 pb-3">
-            <div routerLink="/car" class="col card-car"><!--car-->
+            @for (car of cars; track car.id) {
+            <div [routerLink]="['car', car.id]" class="col card-car"><!--car-->
                 <div class="card">
-                    <a routerLink="/caraddedit" class="btn btn-warning btn-md button-edit" type="button">
+                    @if(apiService.isAdmin()=="true"){
+                    <a [routerLink]="['car', car.id, 'edit']" class="btn btn-warning btn-md button-edit" type="button">
                         <i class="bi bi-tools"></i>
                     </a>
-                    <img class="card-img-top" src="header_img.jpg" alt="Card image cap">
+                    }
+                    @if(apiService.isAuthenticated()){
+                        @if(doiLikeThisCar(car)){
+                            <button (click)="unlike(car.id.toString()); $event.stopPropagation();false" class="btn btn-warning btn-md button-like" type="button">
+                                    <i class="bi bi-suit-heart-fill"></i>
+                            </button>
+                        }@else {
+                            <button (click)="like(car.id.toString()); $event.stopPropagation();false" class="btn btn-warning btn-md button-like" type="button">
+                                    <i class="bi bi-suit-heart"></i>
+                            </button>
+                        }
+                    }
+                    <img class="card-img-top" src="{{car_image_home_url}}/image_uploads/{{car.image_name}}"
+                        alt="Card image cap">
                     <div class="card-body p-1">
-                        <p class="card-text">brand
-                            <br>model
-                            <br>year
+                        <p class="card-text">
+                            <b>{{car.brand}}</b> {{car.model}}
+                            <br>{{car.year}}
                         </p>
+                        <p class="bg-warning text-center mb-0"><b>{{car.price}} €</b></p>
                         <!-- <a href="#" class="btn btn-primary">Go</a> -->
                     </div>
                 </div>
             </div>
+            } @empty {
+            <!-- <div routerLink="/car" class="col card-car">
+                    <div class="card">
+                        <a routerLink="/caraddedit" class="btn btn-warning btn-md button-edit" type="button">
+                            <i class="bi bi-tools"></i>
+                        </a>
+                        <img class="card-img-top" src="header_img.jpg" alt="Card image cap">
+                        <div class="card-body p-1">
+                            <p class="card-text">
+                                <b>brand</b> model
+                                <br>year
+                            </p>
+                            <p class="bg-warning text-center mb-0"><b>Price</b></p>
+                        </div>
+                    </div>
+                </div> -->
+            }
         </div>
         <div class="row">
             <nav aria-label="Move trough pages">
                 <ul class="pagination justify-content-center">
+                    <!-- if 1st page class ...disabled -->
+                    <li (click)="prev_page()" class="page-item ">
+                        <button class="page-link bg-warning text-dark border-warning">Previous</button>
+                    </li>
                     <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        <button class="page-link">{{get_page}}</button>
                     </li>
-                    <li class="page-item active"><a class="page-link" href="#">1<span
-                                class="sr-only">(current)</span></a></li>
-                    <li class="page-item ">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                    <!-- if last page class ...disabled -->
+                    <li (click)="next_page()" class="page-item border-warning">
+                        <button class="page-link bg-warning text-dark border-warning">Next</button>
                     </li>
                 </ul>
             </nav>
         </div>
-        
+
 
     </div>
 

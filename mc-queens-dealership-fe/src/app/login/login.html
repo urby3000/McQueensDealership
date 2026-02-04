@@ -4,44 +4,59 @@
             <h1>Login with existing account.</h1>
             <form>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    <label for="emaillogin">Email address</label>
+                    <input [formControl]="login_email" name="email" type="email" class="form-control" id="email"
                         placeholder="Enter email">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <label for="passwordlogin">Password</label>
+                    <input [formControl]="login_password" name="password" type="password" class="form-control"
+                        id="password" placeholder="Password">
                 </div>
-                <!-- <div class="form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Keep me logged in.</label>
-  </div> -->
-                <button type="submit" class="btn btn-primary">Login</button>
             </form>
+            @if (login_err != "") {
+            <div class="alert alert-danger" role="alert">
+                {{login_err}}
+            </div>
+            }
+            <button (click)="login()" class="btn btn-warning">Login</button>
         </div>
         <div class="col-12 col-sm-6">
             <h1>Create a new account.</h1>
             <form>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                        placeholder="Enter email">
-                    <small id="emailHelp" class="form-text text-muted">We'll definitely share your email with everyone.</small>
+                    <label for="create_email">Email address</label>
+                    <input [formControl]="create_email" type="email" class="form-control" id="create_email"
+                        aria-describedby="emailHelp" placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">We'll definitely share your email with
+                        everyone.</small>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <label for="create_password">Password</label>
+                    <input [formControl]="create_password" type="password" class="form-control" id="create_password"
+                        placeholder="Password">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Confirm Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password">
+                    <label for="create_password_confirm">Confirm Password</label>
+                    <input [formControl]="create_password_confirm" type="password" class="form-control"
+                        id="create_password_confirm" placeholder="Confirm Password">
                 </div>
                 <!-- <div class="form-check">
     <input type="checkbox" class="form-check-input" id="exampleCheck1">
     <label class="form-check-label" for="exampleCheck1">Keep me logged in.</label>
   </div> -->
-                <button type="submit" class="btn btn-primary">Create</button>
             </form>
+            @if (create_err != "") {
+            <div class="alert alert-danger" role="alert">
+                {{create_err}}
+            </div>
+            }
+            @if (create_succ) {
+            <div class="alert alert-success" role="alert">
+                Huzzzah! Account created. You can proceed to login!
+            </div>
+            }
+            <button (click)="register()" class="btn btn-warning">Create</button>
         </div>
     </div>
 </div>

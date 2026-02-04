@@ -6,33 +6,41 @@
 ◦ Vrsta goriva
 ◦ Število vrat
 ◦ Opis -->
-<div class="container">
-    <div class="row pb-3">
+<div class="container pb-4 pt-4 pl-3 pr-3">
+    <div class="row pl-2">
         <div class="col-12">
-            <a routerLink="/caraddedit"
-                class="btn btn-warning btn-md float-start" type="button">
+            @if(apiService.isAdmin()=="true"){
+            <a [routerLink]="['edit']" class="btn btn-warning btn-md float-start" type="button">
                 <i class="bi bi-tools"></i> Edit Ad
             </a>
+            }
+            @if(apiService.isAuthenticated()){
+            @if(doiLikeThisCar(car)){
+            <button (click)="unlike(car.id.toString())" class="btn btn-warning btn-md float-end" type="button">
+                <i class="bi bi-suit-heart-fill"></i>
+            </button>
+            }@else {
+
+            <button (click)="like(car.id.toString())" class="btn btn-warning btn-md float-end" type="button">
+                <i class="bi bi-suit-heart"></i>
+            </button>
+            }
+            }
         </div>
         <div class="col-12">
-            <h1 class="text-center">Brand - Model</h1>
+            <h1 class="text-center">{{car.brand}} - {{car.model}}</h1>
         </div>
         <div class="col-12 col-sm-6">
-            <h2>Year</h2>
-            <h4>Fuel type</h4>
-            <h4>Doors</h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut metus sem. Integer eu urna magna. Nulla
-                at dui mauris. Fusce mollis placerat leo at ultrices. Vestibulum nec faucibus nibh, a pharetra ante. Nam
-                sit amet blandit arcu. Vestibulum malesuada nisl ut velit dignissim tristique. Suspendisse tempus nulla
-                eu ipsum bibendum rhoncus. Nulla rhoncus sem vel eros faucibus, vel maximus diam laoreet. Cras tincidunt
-                accumsan odio, ut volutpat nulla egestas vitae. Etiam dapibus vel lorem iaculis fringilla. Ut eu dapibus
-                dolor. Curabitur rhoncus, augue id bibendum pretium, erat turpis maximus odio, eget faucibus lacus ipsum
-                at dui. In a scelerisque nunc. In magna lectus, tristique vel scelerisque sit amet, auctor vel diam.
+            <h2>Year: {{car.year}} </h2>
+            <h4>Fuel type: {{car.fuel_type}} </h4>
+            <h4>Doors: {{car.doors}} </h4>
+            <p>{{car.description}}
             </p>
-            <h3 class="bg-warning p-2 text-center">Price</h3>
+            <h3 class="bg-warning p-2 text-center">{{car.price}} € </h3>
         </div>
         <div class="col-12 col-sm-6 d-flex align-items-end">
-            <img src="header_img.jpg" class="img-thumbnail rounded mx-auto d-block" alt="...">
+            <img src="{{car_image_home_url}}/image_uploads/{{car.image_name}}"
+                class="img-thumbnail rounded mx-auto d-block" alt="...">
         </div>
     </div>
 </div>

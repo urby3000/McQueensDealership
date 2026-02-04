@@ -15,6 +15,19 @@
   margin-top: 5px;
   margin-left: 5px;
 }
+.button-like {
+    
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 5px;
+  margin-right: 5px;
+}
 .card-car {
   cursor: pointer;
+}
+.card-img-top {
+  height: 150px;
+  object-fit: cover;
 }

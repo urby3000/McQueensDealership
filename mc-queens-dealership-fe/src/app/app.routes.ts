@@ -13,13 +13,16 @@ export const routes: Routes = [
         path: 'login',
         component: Login,
     },
-    //temp -> TODO car routes...
     {
-        path: 'car',
-        component: Carview,
+        path: 'car/add',
+        component: Caraddedit,
     },
     {
-        path: 'caraddedit',
+        path: 'car/:id',
+        component: Carview
+    },
+    {
+        path: 'car/:id/edit',
         component: Caraddedit,
     },
 ];

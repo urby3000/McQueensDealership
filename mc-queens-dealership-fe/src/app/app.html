@@ -1,28 +1,7 @@
 <app-header></app-header>
 <div class="container bg">
     <!-- mybb ads left and right on large screen; -> top and bottom on small screen -->
-     
-    <!-- mybb navbar -->
-    <div class="container">
-        <div class="row">
-            <div class="col p-4 pt-1 pb-0">
-                <!-- mybb breadcrumbs? -->
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-                    </ol>
-                </nav>
-     <!-- @if(currentRoute != 'login'){
-     } -->
-          <a  routerLink="/login" class="btn btn-warning btn-sm float-end button-login" type="button">
-            <i class="bi bi-door-open"></i>  Login
-            <!--if logged in text = <i class="bi bi-door-closed"></i> Logout-->
-          </a>
-            </div>
-        </div>
-    </div>
-    <!-- mybb navbar -->
-
+    <app-breadcrumbs></app-breadcrumbs>
     <router-outlet></router-outlet>
 </div>
 <app-footer></app-footer>

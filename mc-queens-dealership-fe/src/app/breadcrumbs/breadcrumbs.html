@@ -1,0 +1,34 @@
+<!-- mybb navbar breadcrumbs -->
+<div class="container">
+    <div class="row">
+        <div class="col p-4 pt-1 pb-0">
+            <!-- mybb breadcrumbs? -->
+            <!-- <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+                </ol>
+            </nav> -->
+            
+            <button [routerLink]="['/']" class="btn btn-warning btn-sm float-start" >
+
+                <i class="bi bi-house"></i>
+                Home
+            </button>
+
+            @if(apiService.isAuthenticated()){
+
+            <a (click)="logout()" class="btn btn-warning btn-sm float-end button-login" type="button">
+
+                {{apiService.userEmail()}} <i class="bi bi-door-open"></i> Logout
+            </a>
+            }
+            @else {
+            <a routerLink="/login" class="btn btn-warning btn-sm float-end button-login" type="button">
+
+                <i class="bi bi-door-closed"></i> Login
+            </a>
+            }
+        </div>
+    </div>
+</div>
+<!-- mybb navbar breadcrumbs-->
