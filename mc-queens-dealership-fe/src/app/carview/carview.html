@@ -16,12 +16,14 @@
             }
             @if(apiService.isAuthenticated()){
             @if(doiLikeThisCar(car)){
-            <button (click)="unlike(car.id.toString())" class="btn btn-warning btn-md float-end" type="button">
+            <button [ngClass]="doiLikeThisCar(car) ? 'btn-warning' : 'btn-light' " 
+             (click)="unlike(car.id.toString())" class="btn btn-md float-end" type="button">
                 <i class="bi bi-suit-heart-fill"></i>
             </button>
             }@else {
 
-            <button (click)="like(car.id.toString())" class="btn btn-warning btn-md float-end" type="button">
+            <button [ngClass]="doiLikeThisCar(car) ? 'btn-warning' : 'btn-light' "  
+            (click)="like(car.id.toString())" class="btn btn-md float-end" type="button">
                 <i class="bi bi-suit-heart"></i>
             </button>
             }

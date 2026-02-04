@@ -118,8 +118,10 @@
         </div>
         <div class="col-12 col-sm-6 d-flex align-items-end">
             
-            @if (is_edit) {
-            <img src="{{car_image_home_url}}/image_uploads/{{car.image_name}}" class="img-thumbnail rounded mx-auto d-block" alt="...">
+            @if (is_edit && car.image_name) {
+                <img src="{{car_image_home_url}}/image_uploads/{{car.image_name}}" class="img-thumbnail rounded mx-auto d-block" alt="...">
+            }@else {
+                <img [src]="img_preview" class="img-thumbnail rounded mx-auto d-block" alt="...">
             }
         </div>
     </div>

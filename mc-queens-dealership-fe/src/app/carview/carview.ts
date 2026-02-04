@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../api-service';
 import { Car } from '../interfaces';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-carview',
-  imports: [RouterLink],
+  imports: [RouterLink, NgClass],
   templateUrl: './carview.html',
   styleUrl: './carview.css',
 })

@@ -85,7 +85,8 @@
 
 
             @if(apiService.isAuthenticated()){
-            <button (click)="toggle_liked()" type="button" class="btn btn-warning m-1">
+            <button (click)="toggle_liked()" type="button" class="btn btn-warning m-1" 
+            [ngClass]="filter_show_liked ? 'btn-warning' : 'btn-light' ">
                 @if(filter_show_liked){
                     <i class="bi bi-suit-heart-fill"></i>
                 }@else {
@@ -123,17 +124,19 @@
             <div [routerLink]="['car', car.id]" class="col card-car"><!--car-->
                 <div class="card">
                     @if(apiService.isAdmin()=="true"){
-                    <a [routerLink]="['car', car.id, 'edit']" class="btn btn-warning btn-md button-edit" type="button">
+                    <a [routerLink]="['car', car.id, 'edit']" class="btn btn-warning btn-sm button-edit" type="button">
                         <i class="bi bi-tools"></i>
                     </a>
                     }
                     @if(apiService.isAuthenticated()){
                         @if(doiLikeThisCar(car)){
-                            <button (click)="unlike(car.id.toString()); $event.stopPropagation();false" class="btn btn-warning btn-md button-like" type="button">
+                            <button [ngClass]="doiLikeThisCar(car) ? 'btn-warning' : 'btn-light' " 
+                            (click)="unlike(car.id.toString()); $event.stopPropagation();false" class="btn btn-sm button-like" type="button">
                                     <i class="bi bi-suit-heart-fill"></i>
                             </button>
                         }@else {
-                            <button (click)="like(car.id.toString()); $event.stopPropagation();false" class="btn btn-warning btn-md button-like" type="button">
+                            <button [ngClass]="doiLikeThisCar(car) ? 'btn-warning' : 'btn-light' " 
+                            (click)="like(car.id.toString()); $event.stopPropagation();false" class="btn btn-sm button-like" type="button">
                                     <i class="bi bi-suit-heart"></i>
                             </button>
                         }

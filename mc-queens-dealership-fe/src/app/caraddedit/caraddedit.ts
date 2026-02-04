@@ -12,6 +12,7 @@ import { Car } from '../interfaces';
 })
 export class Caraddedit implements OnInit {
 
+  img_preview = "";
   is_edit = false;
   create_err = false;
   car: Car = ({} as any) as Car;
@@ -70,6 +71,7 @@ export class Caraddedit implements OnInit {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
       this.file = target.files[0];
+      this.imagePreview();
     }
 
   }
@@ -98,5 +100,18 @@ export class Caraddedit implements OnInit {
       this.create_err = true;
     }
   }
+
+  imagePreview(): void {
+  this.img_preview = '';
+  if (this.file) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.img_preview = e.target.result;
+      this.cd.detectChanges();
+    };
+    reader.readAsDataURL(this.file);
+  }
+}
+
 
 }
