@@ -1,7 +1,7 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { ApiService } from '../api-service';
-import { CarsList, Car, Pagination, FilterArg } from '../interfaces';
+import { CarsList, Car, Pagination, FilterArg, Like } from '../interfaces';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 
@@ -13,10 +13,10 @@ import { NgClass } from '@angular/common';
 })
 export class Home implements OnInit {
 
-  constructor(public apiService: ApiService) {
+  constructor(public apiService: ApiService, private cd: ChangeDetectorRef) {
   }
-  /*italian hand gesture*/pagination_iteration/*italian hand gesture*/: number[] = [5, 10, 25, 50, 100]
-  per_page = 25;
+  /*italian hand gesture*/pagination_iteration/*italian hand gesture*/: number[] = [8, 12, 24, 48, 96]
+  per_page = 24;
   get_page = 1;
 
   sort_iterations: string[] = ["none", "desc", "asc"];
@@ -24,6 +24,7 @@ export class Home implements OnInit {
   current_sort_year = "none";
   current_sort_price = "none";
 
+  filter_show_liked = false;
   filter_add_brand = new FormControl('');
   filter_min_price = new FormControl('');
   filter_max_price = new FormControl('');
@@ -35,7 +36,7 @@ export class Home implements OnInit {
   pagination_info: Pagination = ({} as any) as Pagination;
 
   ngOnInit(): void {
-    this.per_page = this.pagination_iteration[2];
+    this.per_page = this.pagination_iteration[1];
     this.car_image_home_url = this.apiService.api_url;
     this.getCarList();
   }
@@ -45,20 +46,15 @@ export class Home implements OnInit {
       (data) => {
         this.cars = data.results;
         this.pagination_info = data.pagination;
+        this.get_page = this.pagination_info.page;
+        this.cd.detectChanges();
       }
     );
   }
   like(car_id: string): void {
     this.apiService.like(car_id).subscribe(
       (data) => {
-          this.apiService.getCar(Number(car_id)).subscribe(
-            (data2) => {
-              let car = data2;
-              let index = this.cars.indexOf(car);
-              this.cars[index] = car;
-            }
-          );
-        console.log(data);
+        this.getCarList();
       }
     );
 
@@ -66,14 +62,7 @@ export class Home implements OnInit {
   unlike(car_id: string): void {
     this.apiService.unlike(car_id).subscribe(
       (data) => {
-          this.apiService.getCar(Number(car_id)).subscribe(
-            (data2) => {
-              let car = data2;
-              let index = this.cars.indexOf(car);
-              this.cars[index] = car;
-            }
-          );
-        console.log(data);
+        this.getCarList();
       }
     );
 
@@ -107,6 +96,10 @@ export class Home implements OnInit {
     }
     if (this.current_sort_year != "none") {
       arr.push({ name: "sortyear" + this.current_sort_year, value: "true" });
+    }
+    if (this.filter_show_liked) {
+      arr.push({ name: "likes", value: "likes" });
+      arr.push({ name: "user_id" , value: this.apiService.userId() || "" });
     }
     return arr;
   }
@@ -144,6 +137,7 @@ export class Home implements OnInit {
       index = 0
     }
     this.per_page = this.pagination_iteration[index];
+    this.get_page = 1;
     this.getCarList();
   }
   prev_page(): void {
@@ -171,7 +165,6 @@ export class Home implements OnInit {
       index = 0
     }
     this.current_sort_brand = this.sort_iterations[index];
-    console.log(this.current_sort_brand);
     this.getCarList();
   }
   sort_year(): void {
@@ -192,6 +185,10 @@ export class Home implements OnInit {
     this.current_sort_price = this.sort_iterations[index];
     this.getCarList();
 
+  }
+  toggle_liked():void {
+    this.filter_show_liked = !this.filter_show_liked;
+    this.getCarList();
   }
 
 }

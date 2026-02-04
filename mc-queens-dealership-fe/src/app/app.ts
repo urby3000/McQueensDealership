@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './header/header';
 import { Footer } from "./footer/footer";
@@ -10,9 +10,6 @@ import { Breadcrumbs } from './breadcrumbs/breadcrumbs';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
+export class App {
   protected readonly title = signal('mc-queens-dealership-fe');
-  ngOnInit(): void {
-    
-  }
 }

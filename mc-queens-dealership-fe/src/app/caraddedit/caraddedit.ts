@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../api-service';
 import { ActivatedRoute, Event, Route, Router } from '@angular/router';
@@ -18,7 +18,7 @@ export class Caraddedit implements OnInit {
   car_id = 0;
   car_image_home_url = "";
 
-  constructor(private apiService: ApiService, public route: ActivatedRoute, private router: Router) {
+  constructor(private apiService: ApiService, public route: ActivatedRoute, private router: Router,  private cd: ChangeDetectorRef) {
     if (route.snapshot.url[1].path != "add") {
       this.is_edit = true
     }
@@ -53,7 +53,7 @@ export class Caraddedit implements OnInit {
         this.fuel.setValue(this.car.fuel_type.toString());
         this.doors.setValue(this.car.doors.toString());
         this.desc.setValue(this.car.description);
-
+        this.cd.detectChanges();
       }
     );
   }
@@ -82,7 +82,8 @@ export class Caraddedit implements OnInit {
         this.apiService.editCar(this.car.id.toString(), this.brand.value, this.model.value, this.year.value, this.price.value,
           this.fuel.value, this.doors.value, this.desc.value, this.file).subscribe((data) => {
             if (data.msg) {//edited
-              this.router.navigate(['/']);
+              this.getCar();
+              this.cd.detectChanges();
             } 
           });
       } else {

@@ -14,8 +14,6 @@ export class ApiService {
 
   constructor(private router: Router, private http: HttpClient, private readonly jwtHelper: JwtHelperService) { }
 
-  // const headers = { 'Authorization': 'Bearer my-token', 'My-Custom-Header': 'foobar' };
-
 
   getCars(per_page:number, get_page:number, filters:FilterArg[]): Observable<CarsList> {
     let baseParams = new HttpParams().set('per_page', per_page).set('page', get_page);

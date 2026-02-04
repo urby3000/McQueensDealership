@@ -80,9 +80,19 @@
             </button>
 
             <button (click)="change_results_per_page()" type="button" class="btn btn-warning m-1">
-                <!-- <i class="bi bi-file-earmark"></i>  -->
                 {{per_page}} x <i class="bi bi-car-front"></i>
             </button>
+
+
+            @if(apiService.isAuthenticated()){
+            <button (click)="toggle_liked()" type="button" class="btn btn-warning m-1">
+                @if(filter_show_liked){
+                    <i class="bi bi-suit-heart-fill"></i>
+                }@else {
+                    <i class="bi bi-suit-heart"></i>
+                }
+            </button>
+            }
 
             @if(min_price_saved!=""){
             <button (click)="filter_min_price_remove()" type="button" class="btn btn-warning m-1">
@@ -131,9 +141,11 @@
                     <img class="card-img-top" src="{{car_image_home_url}}/image_uploads/{{car.image_name}}"
                         alt="Card image cap">
                     <div class="card-body p-1">
-                        <p class="card-text">
+                        <p class="card-text mb-0">
                             <b>{{car.brand}}</b> {{car.model}}
-                            <br>{{car.year}}
+                        </p>
+                        <p class="card-text">
+                            Year: {{car.year}}
                         </p>
                         <p class="bg-warning text-center mb-0"><b>{{car.price}} €</b></p>
                         <!-- <a href="#" class="btn btn-primary">Go</a> -->
@@ -161,14 +173,12 @@
         <div class="row">
             <nav aria-label="Move trough pages">
                 <ul class="pagination justify-content-center">
-                    <!-- if 1st page class ...disabled -->
                     <li (click)="prev_page()" class="page-item ">
                         <button class="page-link bg-warning text-dark border-warning">Previous</button>
                     </li>
                     <li class="page-item disabled">
-                        <button class="page-link">{{get_page}}</button>
+                        <button class="page-link">{{get_page}}/{{pagination_info.pages}}</button>
                     </li>
-                    <!-- if last page class ...disabled -->
                     <li (click)="next_page()" class="page-item border-warning">
                         <button class="page-link bg-warning text-dark border-warning">Next</button>
                     </li>

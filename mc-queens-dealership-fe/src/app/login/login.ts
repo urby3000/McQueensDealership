@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../api-service';
@@ -24,7 +24,7 @@ export class Login implements OnInit {
 
 
   constructor(private apiService: ApiService,
-    private router: Router) {
+    private router: Router, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -37,6 +37,7 @@ export class Login implements OnInit {
       this.apiService.login(this.login_email.value, this.login_password.value).subscribe({
         next: (v) => {
           this.login_err = v;
+          this.cd.detectChanges();
         },
       });
     }
@@ -55,6 +56,7 @@ export class Login implements OnInit {
         } else {//err data.err
           this.create_err = data.err
         }
+        this.cd.detectChanges();
       });
     }
   }
