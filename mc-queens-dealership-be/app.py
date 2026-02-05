@@ -21,7 +21,7 @@ app.config["UPLOAD_EXTENSIONS"] = config["UPLOAD_EXTENSIONS"]
 app.config["UPLOAD_PATH"] = config["UPLOAD_PATH"]
 
 # Setup the Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = "supersecretkey"  # Change this!
+app.config["JWT_SECRET_KEY"] = config["SECRET_KEY"]
 jwt = JWTManager(app)
 
 

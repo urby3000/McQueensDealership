@@ -1,0 +1,161 @@
+{
+    "users": [
+        {
+            "id": 0,
+            "email": "admin@admin",
+            "password": "admin",
+            "is_admin": true
+        },
+        {
+            "id": 1,
+            "email": "user@user",
+            "password": "user",
+            "is_admin": false
+        }
+    ],
+    "cars": [
+        {
+            "id": 0,
+            "brand": "Renault",
+            "model": "5 Turbo",
+            "year": 1980,
+            "price": 42500,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "The Renault 5 Turbo or R5 Turbo is a sports car which was produced by French manufacturer Renault from 1980 until 1984. It has a rear mid-engine, rear-wheel-drive layout and was originally designed as a homologation special to compete in rallying.",
+            "image_name": "5_turbo.jpg"
+        },
+        {
+            "id": 1,
+            "brand": "Toyota",
+            "model": "AE86",
+            "year": 1984,
+            "price": 14999,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "Ex delivery car. Runs good.",
+            "image_name": "ae86.jpg"
+        },
+        {
+            "id": 2,
+            "brand": "Renault",
+            "model": "Clio v6",
+            "year": 2005,
+            "price": 25600,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "1 owner. Final price.",
+            "image_name": "clio_v6.jpg"
+        },
+        {
+            "id": 3,
+            "brand": "Bmw",
+            "model": "E9 CSL",
+            "year": 1972,
+            "price": 79500,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "New engine and suspension.",
+            "image_name": "e9_csl.jpg"
+        },
+        {
+            "id": 4,
+            "brand": "Bmw",
+            "model": "E30",
+            "year": 1986,
+            "price": 3000,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "Needs parts. Rust bucket. 300.000KM",
+            "image_name": "e30.jpg"
+        },
+        {
+            "id": 5,
+            "brand": "Bmw",
+            "model": "E30",
+            "year": 2000,
+            "price": 10666,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "is slow is cute. Refurbished. Only needs new head gasket. 170.000KM.",
+            "image_name": "e36_compact.jpg"
+        },
+        {
+            "id": 6,
+            "brand": "Renault",
+            "model": "Espace Formula",
+            "year": 2002,
+            "price": 160000,
+            "fuel_type": "gasoline",
+            "doors": 4,
+            "description": "is fast.",
+            "image_name": "espace_formula.jpg"
+        },
+        {
+            "id": 7,
+            "brand": "Ferrari",
+            "model": "250 GTO",
+            "year": 1963,
+            "price": 1100000,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "is old.",
+            "image_name": "gto_250.jpg"
+        },
+        {
+            "id": 8,
+            "brand": "Lola",
+            "model": "T70",
+            "year": 1965,
+            "price": 90000,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "Ex Can-Am. Runs well. ",
+            "image_name": "lola_t70.jpg"
+        },
+        {
+            "id": 9,
+            "brand": "Porsche",
+            "model": "911",
+            "year": 1967,
+            "price": 56000,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "Summer car. Needs fluids changed and new tires.",
+            "image_name": "porsche_911.jpg"
+        },
+        {
+            "id": 10,
+            "brand": "Toyota",
+            "model": "Previa",
+            "year": 1992,
+            "price": 2500,
+            "fuel_type": "gasoline",
+            "doors": 3,
+            "description": "630.000KM. Needs work.",
+            "image_name": "previa.jpg"
+        },
+        {
+            "id": 11,
+            "brand": "Skyline",
+            "model": "R31",
+            "year": 1990,
+            "price": 6700,
+            "fuel_type": "gasoline",
+            "doors": 4,
+            "description": "260.000KM. Grocery getter.",
+            "image_name": "r31.jpg"
+        },
+        {
+            "id": 12,
+            "brand": "Renault",
+            "model": "Twingo",
+            "year": 2001,
+            "price": 500,
+            "fuel_type": "gasoline",
+            "doors": 2,
+            "description": "354.000KM.",
+            "image_name": "twingo.jpg"
+        }
+    ]
+}
